@@ -1,13 +1,12 @@
 # trafficLightTask
 home task from seraphimas-hls
-Original letter:
 
-Guidelines:
+# Guidelines:
 The project should be written for linux, in C++ (14+), using std library only.
 You can use any tool to build the project (from Eclipse IDE to writing your own make file).
 Include a readme with software design decisions (what and why you implemented) and compilation instructions.
  
-Project:
+# Project:
 Create random amount of Trafic-lights (3..20), they don’t know about each other but only one can be green at a time.
  
 Each traffic-light [class] has [a random] Priority; name-idx (for logging)
