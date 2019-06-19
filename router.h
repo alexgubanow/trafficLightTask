@@ -1,4 +1,5 @@
 #pragma once
+#include <vector>
 
 struct rqForG
 {
@@ -9,7 +10,7 @@ struct rqForG
 class router_t
 {
 private:
-	int TopIdx;
+	std::vector<rqForG> queue;
 public:
 	router_t();
 	int getCurrIdx();
