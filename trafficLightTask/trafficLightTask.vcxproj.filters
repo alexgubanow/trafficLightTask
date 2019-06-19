@@ -44,5 +44,8 @@
     <ClInclude Include="router.h">
       <Filter>Header files</Filter>
     </ClInclude>
+    <ClInclude Include="lightDriver.h">
+      <Filter>Header files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
