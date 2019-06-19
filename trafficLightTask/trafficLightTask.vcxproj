@@ -51,11 +51,15 @@
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="lgth.cpp" />
     <ClCompile Include="trafficLightTask.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="trafficLightTask-Debug.vgdbsettings" />
     <None Include="trafficLightTask-Release.vgdbsettings" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="lgth.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
