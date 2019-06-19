@@ -4,14 +4,16 @@
 #include <thread>
 using namespace std;
 
-lght_t::lght_t(lghtColor initColor, float _delay, int _priority, int _idx, router_t* _routerInst)
+int lght_t::init(lghtColor initColor, int _delay, int _priority, int _idx, router_t* _routerInst)
 {
+	printf("init of lght#: %d\n", _idx);
 	isCanRun = 1;
 	routerInst = _routerInst;
 	idx = _idx;
 	currLight = initColor;
 	delay = _delay;
 	priority = _priority;
+	return 0;
 }
 int lght_t::wLoop()
 {
@@ -20,11 +22,11 @@ int lght_t::wLoop()
 	{
 		//update info for request
 		request.idx = idx;
-		request.priority = priority;
+		request.priority = priority + idx;
 		//pushing request (idx+priority) to queue
 		routerInst->pushRequest(request);
 		//can be replaced by listening some port or other external interface
-		while (routerInst->getCurrIdx() != idx) { }
+		while (routerInst->getCurrIdx() != idx) {}
 		//sw to green
 		swLight(lghtColor::Grn);
 		//wait for setted delay

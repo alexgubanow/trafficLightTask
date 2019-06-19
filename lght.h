@@ -11,8 +11,6 @@ private:
 	lghtColor currLight;
 	/*setted delay*/
 	int delay;
-	/*setted priority*/
-	int priority;
 	/*Method to switch color from current to target, transition going with yellow in middle
 	* args:
 	* target - desired color
@@ -25,7 +23,9 @@ private:
 public:
 	/*index of this*/
 	int idx;
-	lght_t(lghtColor initColor, float _delay, int _priority, int _idx, router_t* _routerInst);
+	/*setted priority*/
+	int priority;
+	int init(lghtColor initColor, int _delay, int _priority, int _idx, router_t* _routerInst);
 	/*Method with main loop, can be stoped by switching isCanRun to 0*/
 	int wLoop();
 	/*Method to stop running main loop
