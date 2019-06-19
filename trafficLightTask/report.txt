@@ -1,0 +1,15 @@
+First draft of system structure:
+
+queue of levels  --> router broadcasting who can
+      ^                 |
+      |            wait for full queue
+push idx+prior          |
+ ^   ^   ^              |
+ |   |   |              |
+|1| |2| |n|     idx <--- 
+
+Each module have inner while loop, in which:
+ - pushing request (idx+priority) to queue for switch on green
+ - wait until receive own idx
+ - after setted delay switch to red and push request to clear reservation
+ - wait for setted delay
