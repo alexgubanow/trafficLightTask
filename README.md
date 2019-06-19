@@ -16,3 +16,19 @@ Each traffic-light is its own thread <Bonus: use timer instead; https://linux.di
 Every time a traffic-light wants to / changes state it will call a custom created driver (ioctl / or ..) with the relevant command and name-idx; printk to the screen;
 <Bonus: also write to the log file; Avoid conflicts using blocking flock https://linux.die.net/man/2/flock>
 Avoid starvation of low Priority traffic-lights.
+
+# First draft of system structure:
+
+queue of levels  --> router broadcasting who can
+      ^                 |
+      |            wait for full queue
+push idx+prior          |
+ ^   ^   ^              |
+ |   |   |              |
+|1| |2| |n|     idx <--- 
+
+Each module have inner while loop, in which:
+ - pushing request (idx+priority) to queue for switch on green
+ - wait until receive own idx
+ - after setted delay switch to red and push request to clear reservation
+ - wait for setted delay
