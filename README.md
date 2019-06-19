@@ -17,6 +17,14 @@ Every time a traffic-light wants to / changes state it will call a custom create
 <Bonus: also write to the log file; Avoid conflicts using blocking flock https://linux.die.net/man/2/flock>
 Avoid starvation of low Priority traffic-lights.
 # Report
+## Build && run
+I have used WSL on my W10 machine, have installed it according this https://devblogs.microsoft.com/cppblog/targeting-windows-subsystem-for-linux-from-visual-studio/
+Basically you have to intall your WSL, setup there build-essential, gdbserver and openssh-server. After need to configure ssh server.
+but additionally you have to check for installed g++, gdb, make, rsync, zip. I can suggest just run:
+'''
+sudo apt-get install -y g++ gdb make rsync zip
+'''
+
 ## First draft of system structure:
 
 queue of levels  --> router broadcasting who can
