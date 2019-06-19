@@ -1,12 +1,12 @@
 # trafficLightTask
 home task from seraphimas-hls
 
-# Guidelines:
+## Guidelines:
 The project should be written for linux, in C++ (14+), using std library only.
 You can use any tool to build the project (from Eclipse IDE to writing your own make file).
 Include a readme with software design decisions (what and why you implemented) and compilation instructions.
  
-# Project:
+## Project:
 Create random amount of Trafic-lights (3..20), they don’t know about each other but only one can be green at a time.
  
 Each traffic-light [class] has [a random] Priority; name-idx (for logging)
@@ -16,8 +16,8 @@ Each traffic-light is its own thread <Bonus: use timer instead; https://linux.di
 Every time a traffic-light wants to / changes state it will call a custom created driver (ioctl / or ..) with the relevant command and name-idx; printk to the screen;
 <Bonus: also write to the log file; Avoid conflicts using blocking flock https://linux.die.net/man/2/flock>
 Avoid starvation of low Priority traffic-lights.
-
-# First draft of system structure:
+# Report
+## First draft of system structure:
 
 queue of levels  --> router broadcasting who can
       ^                 |
