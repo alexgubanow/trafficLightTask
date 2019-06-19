@@ -22,6 +22,9 @@
     <ClCompile Include="trafficLightTask.cpp">
       <Filter>Source files</Filter>
     </ClCompile>
+    <ClCompile Include="lght.cpp">
+      <Filter>Source files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="trafficLightTask-Debug.vgdbsettings">
@@ -30,5 +33,10 @@
     <None Include="trafficLightTask-Release.vgdbsettings">
       <Filter>VisualGDB settings</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="lght.h">
+      <Filter>Header files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

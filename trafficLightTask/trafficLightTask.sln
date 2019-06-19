@@ -5,6 +5,11 @@ VisualStudioVersion = 16.0.29006.145
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "trafficLightTask", "trafficLightTask.vcxproj", "{3E5BCB86-DFF3-4193-823F-6350F93EA19E}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{5C8DADA6-EB0A-48D4-AC9C-F97D9B5E66EC}"
+	ProjectSection(SolutionItems) = preProject
+		report.txt = report.txt
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|VisualGDB = Debug|VisualGDB
