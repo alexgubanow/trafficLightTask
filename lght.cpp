@@ -6,7 +6,7 @@ using namespace std;
 
 int lght_t::init(lghtColor initColor, int _delay, int _priority, int _idx, router_t* _routerInst)
 {
-	printf("init of lght#: %d\n", _idx);
+	printf("init of lght idx#%d\n", _idx);
 	isCanRun = 1;
 	routerInst = _routerInst;
 	idx = _idx;
@@ -15,27 +15,31 @@ int lght_t::init(lghtColor initColor, int _delay, int _priority, int _idx, route
 	priority = _priority;
 	return 0;
 }
-int lght_t::wLoop()
+int lght_t::wLoop(decltype(routerInst->queue) safe_queue)
 {
-	rqForG request;
-	while (isCanRun)
-	{
-		//update info for request
-		request.idx = idx;
-		request.priority = priority + idx;
-		//pushing request (idx+priority) to queue
-		routerInst->pushRequest(request);
-		//can be replaced by listening some port or other external interface
-		while (routerInst->getCurrIdx() != idx) {}
-		//sw to green
-		swLight(lghtColor::Grn);
-		//wait for setted delay
-		std::this_thread::sleep_for(std::chrono::milliseconds(delay));
-		//sw to red
-		swLight(lghtColor::Red);
-		//wait for setted delay
-		std::this_thread::sleep_for(std::chrono::milliseconds(delay));
-	}
+	/*printf("waiting for lock idx#%d\n", idx);
+	(*mtxP).lock();
+	printf("going to lock idx#%d\n", idx);*/
+	//pushing request (idx+priority) to queue
+	routerInst->pushRequest(idx, priority + idx);
+	//(*mtxP).unlock();
+	//while (isCanRun)
+	//{
+	//	routerInst->queueMtx.lock();
+	//	//pushing request (idx+priority) to queue
+	//	routerInst->pushRequest(idx, priority + idx);
+	//	routerInst->queueMtx.unlock();
+	//	//can be replaced by listening some port or other external interface
+	//	while (routerInst->getCurrIdx() != idx) {}
+	//	//sw to green
+	//	swLight(lghtColor::Grn);
+	//	//wait for setted delay
+	//	std::this_thread::sleep_for(std::chrono::milliseconds(delay));
+	//	//sw to red
+	//	swLight(lghtColor::Red);
+	//	//wait for setted delay
+	//	std::this_thread::sleep_for(std::chrono::milliseconds(delay));
+	//}
 	return closeGate();
 }
 int lght_t::closeGate()

@@ -27,7 +27,7 @@ public:
 	int priority;
 	int init(lghtColor initColor, int _delay, int _priority, int _idx, router_t* _routerInst);
 	/*Method with main loop, can be stoped by switching isCanRun to 0*/
-	int wLoop();
+	int wLoop(decltype(routerInst->queue) safe_queue);
 	/*Method to stop running main loop
 	* draft version
 	*/
