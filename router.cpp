@@ -6,37 +6,35 @@ router_t::router_t()
 
 int router_t::getCurrIdx()
 {
-	return queue.back().idx;
+	return queue.begin()->first;
 }
 
 void router_t::clearQueuePlace(int targetIdx)
 {
 	//possible low perfomance, has to be replaced
-	using Iter = std::vector<rqForG>::const_iterator;
-	for (Iter it = queue.begin(); it != queue.end(); it++) {
-		if ((*it).idx == targetIdx)
+	for (auto it = queue.begin(); it != queue.end(); it++) {
+		if (it->first == targetIdx)
 		{
 			queue.erase(it);
 		}
 	}
 }
-int router_t::pushRequest(rqForG rq)
+int router_t::pushRequest(int targetIdx, int targetPrior)
 {
 	//possible low perfomance, has to be replaced
-	using Iter = std::vector<rqForG>::const_iterator;
-	Iter bestPlace = queue.begin();
-	for (Iter it = queue.begin() + 1; it != queue.end(); it++)
+	auto bestPlace = queue.begin();
+	for (auto it = std::prev(queue.begin(), 1); it != queue.end(); it++)
 	{
-		if ((*(it)).priority > rq.priority)
+		if (it->second > targetPrior)
 		{
 			break;
 		}
 		else
 		{
-			bestPlace = it - 1;
+			bestPlace = std::prev(it, 1);
 		}
 	}
-	queue.insert(bestPlace, rq);
+	queue.insert(bestPlace, std::pair<int, int>(targetIdx, targetPrior));
 	//in future can return time to wait until
 	return 0;
 }

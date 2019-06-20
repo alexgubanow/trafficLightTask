@@ -1,5 +1,6 @@
 #pragma once
-#include <vector>
+#include <map>
+#include <mutex>
 
 struct rqForG
 {
@@ -10,10 +11,11 @@ struct rqForG
 class router_t
 {
 private:
-	std::vector<rqForG> queue;
+	std::map<int, int> queue;
 public:
 	router_t();
+	std::mutex queueMtx;
 	int getCurrIdx();
 	void clearQueuePlace(int targetIdx);
-	int pushRequest(rqForG rq);
+	int pushRequest(int targetIdx, int targetPrior);
 };
