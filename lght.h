@@ -5,8 +5,6 @@
 class lght_t
 {
 private:
-	/*pointer to instanse of router*/
-	//router_t* routerInst;
 	/*current color of light*/
 	lghtColor currLight;
 	/*setted delay*/

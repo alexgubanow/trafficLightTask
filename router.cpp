@@ -75,6 +75,7 @@ void setTopIdx(std::map<int, int>::iterator newTop)
 
 int nextPls()
 {
+	//printf("before TopIdx#%d+%d, ", TopIdx->second, TopIdx->first);
 	if (TopIdx != getLqe())
 	{
 		TopIdx++;
@@ -83,6 +84,7 @@ int nextPls()
 	{
 		TopIdx = queue->begin();
 	}
+	//printf("after TopIdx#%d+%d, ", TopIdx->second, TopIdx->first);
 	//in future can return time to wait until
 	return 0;
 }

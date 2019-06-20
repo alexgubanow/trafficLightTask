@@ -21,17 +21,19 @@ int lght_t::wLoop()
 		//printf("waiting idx#%d\n", Itr->second);
 		//can be replaced by listening some port or other external interface
 		while (getTopIdx() != Itr) {
+			//printf("waiting idx#%d\n", Itr->second);
 		}
 		//sw to green
-		printf("idx#%d become green\n", Itr->second);
-		swLight(lghtColor::Grn);
+		//printf("idx#%d green\n", Itr->second);
+		//swLight(lghtColor::Grn);
 		//wait for setted delay
-		std::this_thread::sleep_for(std::chrono::milliseconds(delay));
+		std::this_thread::sleep_for(std::chrono::milliseconds(100));
 		//sw to red
-		printf("idx#%d become red\n", Itr->second);
-		swLight(lghtColor::Red);
+		nextPls();
+		//printf("idx#%d red\n", Itr->second);
+		//swLight(lghtColor::Red);
 		//wait for setted delay
-		std::this_thread::sleep_for(std::chrono::milliseconds(delay));
+		std::this_thread::sleep_for(std::chrono::milliseconds(80));
 	}
 	return closeGate();
 }
@@ -47,7 +49,6 @@ int lght_t::closeGate()
 int lght_t::swLight(lghtColor target)
 {
 	//remove self from Queue
-	nextPls();
 	//turn on yellow
 	//printf("idx#%d become yellow\n", Itr->second);
 	currLight = turnTo(lghtColor::Ylw);
