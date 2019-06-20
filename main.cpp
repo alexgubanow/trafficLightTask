@@ -20,7 +20,7 @@ void posix_death_signal(int signum)
 	signal(signum, SIG_DFL);
 	exit(3);
 }
-void nextPls(decltype(queueG) queue)
+void nextPls(safe_ptr<std::map<int, int>> queue)
 {
 	if (currTopIdx != std::prev(queueG->end()))
 	{
@@ -32,7 +32,7 @@ void nextPls(decltype(queueG) queue)
 	}
 }
 
-std::map<int, int>::iterator pushRequest(decltype(queueG) queue, int targetIdx, int targetPrior)
+std::map<int, int>::iterator pushRequest(safe_ptr<std::map<int, int>> queue, int targetIdx, int targetPrior)
 {
 	std::map<int, int>::iterator itr = queue->insert(queue->lower_bound(targetPrior), std::pair<int, int>(targetPrior, targetIdx));	
 	printf("queue now is: ");
@@ -43,7 +43,7 @@ std::map<int, int>::iterator pushRequest(decltype(queueG) queue, int targetIdx, 
 	printf("\n");
 	return itr;
 }
-void wLoop(decltype(queueG) queue, std::map<int, int>::iterator ownItr)
+void wLoop(safe_ptr<std::map<int, int>> queue, std::map<int, int>::iterator ownItr)
 {
 	while (true)
 	{
