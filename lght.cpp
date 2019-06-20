@@ -4,46 +4,40 @@
 #include <thread>
 using namespace std;
 
-int lght_t::init(lghtColor initColor, int _delay, int _priority, int _idx, router_t* _routerInst)
+int lght_t::init(lghtColor initColor, int _delay, std::map<int, int>::iterator _Itr)
 {
-	printf("init of lght idx#%d\n", _idx);
+	printf("init of lght idx#%d\n", _Itr->second);
 	isCanRun = 1;
-	routerInst = _routerInst;
-	idx = _idx;
+	Itr = _Itr;
+	//routerInst = _routerInst;
 	currLight = initColor;
 	delay = _delay;
-	priority = _priority;
 	return 0;
 }
-int lght_t::wLoop(decltype(routerInst->queue) safe_queue)
+int lght_t::wLoop()
 {
-	/*printf("waiting for lock idx#%d\n", idx);
-	(*mtxP).lock();
-	printf("going to lock idx#%d\n", idx);*/
-	//pushing request (idx+priority) to queue
-	routerInst->pushRequest(idx, priority + idx);
-	//(*mtxP).unlock();
-	//while (isCanRun)
-	//{
-	//	routerInst->queueMtx.lock();
-	//	//pushing request (idx+priority) to queue
-	//	routerInst->pushRequest(idx, priority + idx);
-	//	routerInst->queueMtx.unlock();
-	//	//can be replaced by listening some port or other external interface
-	//	while (routerInst->getCurrIdx() != idx) {}
-	//	//sw to green
-	//	swLight(lghtColor::Grn);
-	//	//wait for setted delay
-	//	std::this_thread::sleep_for(std::chrono::milliseconds(delay));
-	//	//sw to red
-	//	swLight(lghtColor::Red);
-	//	//wait for setted delay
-	//	std::this_thread::sleep_for(std::chrono::milliseconds(delay));
-	//}
+	while (isCanRun)
+	{
+		//printf("waiting idx#%d\n", Itr->second);
+		//can be replaced by listening some port or other external interface
+		while (getTopIdx() != Itr) {
+		}
+		//sw to green
+		printf("idx#%d become green\n", Itr->second);
+		swLight(lghtColor::Grn);
+		//wait for setted delay
+		std::this_thread::sleep_for(std::chrono::milliseconds(delay));
+		//sw to red
+		printf("idx#%d become red\n", Itr->second);
+		swLight(lghtColor::Red);
+		//wait for setted delay
+		std::this_thread::sleep_for(std::chrono::milliseconds(delay));
+	}
 	return closeGate();
 }
 int lght_t::closeGate()
 {
+	/*its not thread safe, has to be rethinked*/
 	//going to red
 	swLight(lghtColor::Red);
 	//prevent to run main loop
@@ -53,8 +47,9 @@ int lght_t::closeGate()
 int lght_t::swLight(lghtColor target)
 {
 	//remove self from Queue
-	routerInst->clearQueuePlace(idx);
+	nextPls();
 	//turn on yellow
+	//printf("idx#%d become yellow\n", Itr->second);
 	currLight = turnTo(lghtColor::Ylw);
 	//wait for pretty transition
 	std::this_thread::sleep_for(std::chrono::milliseconds(getSmallDelay()));

@@ -1,56 +1,100 @@
 #include "router.h"
 
-router_t::router_t()
+//router_t::router_t()
+//{
+//}
+//
+//std::map<int, int>::iterator router_t::getTopIdx()
+//{
+//	return TopIdx;
+//}
+//
+//std::map<int, int>::iterator router_t::getFqe()
+//{
+//	return queue->begin();
+//}
+//
+//std::map<int, int>::iterator router_t::getLqe()
+//{
+//	return std::prev(queue->end());
+//}
+//
+//void router_t::setTopIdx(std::map<int, int>::iterator newTop)
+//{
+//	TopIdx = newTop;
+//}
+//
+//int router_t::nextPls()
+//{
+//	if (TopIdx != getLqe())
+//	{
+//		TopIdx++;
+//	}
+//	else
+//	{
+//		TopIdx = queue->begin();
+//	}
+//	//in future can return time to wait until
+//	return 0;
+//}
+//
+//std::map<int, int>::iterator router_t::pushRequest(std::pair<int, int> rq)
+//{
+//	std::map<int, int>::iterator itr = queue->insert(queue->lower_bound(rq.first), rq);
+//	printf("queue now is: ");
+//	for (auto itr = queue->begin(); itr != queue->end(); itr++)
+//	{
+//		printf("idx#%d+%d, ", itr->second, itr->first);
+//	}
+//	printf("\n");
+//	return itr;
+//}
+
+std::map<int, int>::iterator TopIdx;
+safe_ptr<std::map<int, int>> queue;
+
+std::map<int, int>::iterator getTopIdx()
 {
+	return TopIdx;
 }
 
-int router_t::getCurrIdx()
+std::map<int, int>::iterator getFqe()
 {
-	return queue->begin()->first;
+	return queue->begin();
 }
 
-void router_t::clearQueuePlace(int targetIdx)
+std::map<int, int>::iterator getLqe()
 {
-	//possible low perfomance, has to be replaced
-	for (auto it = queue->begin(); it != queue->end(); it++) {
-		if (it->first == targetIdx)
-		{
-			queue->erase(it);
-		}
-	}
+	return std::prev(queue->end());
 }
-int router_t::pushRequest(int targetIdx, int targetPrior)
+
+void setTopIdx(std::map<int, int>::iterator newTop)
 {
-	std::lock_guard<decltype(queue)>lock(queue);
-	printf("incoming rq  idx#%d\n", targetIdx);
-	if (queue->size() == 0)
+	TopIdx = newTop;
+}
+
+int nextPls()
+{
+	if (TopIdx != getLqe())
 	{
-		printf("queue is zero\n");
-		queue->insert(std::pair<int, int>(targetIdx, targetPrior));
+		TopIdx++;
 	}
 	else
 	{
-		//possible low perfomance, has to be replaced
-		auto bestPlace = queue->begin();
-		for (auto it = std::prev(queue->begin(), 1); it != queue->end(); it++)
-		{
-			if (it->second > targetPrior)
-			{
-				break;
-			}
-			else
-			{
-				bestPlace = std::prev(it, 1);
-			}
-		}
-		queue->insert(bestPlace, std::pair<int, int>(targetIdx, targetPrior));
+		TopIdx = queue->begin();
 	}
+	//in future can return time to wait until
+	return 0;
+}
+
+std::map<int, int>::iterator pushRequest(std::pair<int, int> rq)
+{
+	std::map<int, int>::iterator itr = queue->insert(queue->lower_bound(rq.first), rq);
 	printf("queue now is: ");
 	for (auto itr = queue->begin(); itr != queue->end(); itr++)
 	{
-		printf("idx#%d, ", itr->first);
+		printf("idx#%d+%d, ", itr->second, itr->first);
 	}
 	printf("\n");
-	//in future can return time to wait until
-	return 0;
+	return itr;
 }
