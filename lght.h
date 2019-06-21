@@ -13,7 +13,7 @@ private:
 	* args:
 	* target - desired color
 	*/
-	int swLight(lghtColor target);
+	int swLight(lghtColor target, router_t* rtrI);
 	/*flag of working posibility*/
 	int volatile isCanRun;
 public:
@@ -26,5 +26,5 @@ public:
 	/*Method to stop running main loop
 	* draft version
 	*/
-	int closeGate();
+	int closeGate(router_t* rtrI);
 };
