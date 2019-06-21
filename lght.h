@@ -14,8 +14,6 @@ private:
 	* target - desired color
 	*/
 	int swLight(lghtColor target);
-	/*Method to get some small delay for yellow color on state*/
-	int getSmallDelay();
 	/*flag of working posibility*/
 	int volatile isCanRun;
 public:

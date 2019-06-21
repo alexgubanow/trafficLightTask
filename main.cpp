@@ -14,6 +14,9 @@ using namespace std;
 constexpr auto frstLght = 1;
 constexpr auto maxLght = 4;
 
+char* logFlName = (char*)"traflght.log";
+
+std::string getStrQueue(safe_ptr<router_t> rtr);
 void setupOnExitHandlers();
 
 int main(int argc, char* argv[])
@@ -23,7 +26,7 @@ int main(int argc, char* argv[])
 	//main exiter
 	atexit(mainExit);
 	//init log funcs
-	initLog("test.txt");
+	initLog(logFlName);
 	//router instance
 	safe_ptr<router_t> rtr;
 	//init of random machine
@@ -37,19 +40,9 @@ int main(int argc, char* argv[])
 	{
 		//just pushing pair of random prior and current idx to stack of light iterators, probably possible to run in parallel
 		iteratorStack.push_back(rtr->pushRequest(std::pair<int, int>(rand() % 100, i)));
-	}
-	std::string strQueue = "queue now is: ";
-	for (auto itr = rtr->getFqe(); itr != std::next(rtr->getLqe()); itr++)
-	{
-		strQueue.append("idx#");
-		strQueue.append(std::to_string(itr->second));
-		strQueue.append("+");
-		strQueue.append(std::to_string(itr->first));
-		strQueue.append(", ");
-	}
-	strQueue.erase(strQueue.size()-2, 2);
-	inLog(strQueue);
-	cout << strQueue.c_str() << endl;
+	}	
+	inLog(getStrQueue(rtr));
+	cout << getStrQueue(rtr).c_str() << endl;
 	//iterate over lights, create, init and run each
 	for (size_t i = 0; i < iteratorStack.size(); i++)
 	{
@@ -68,6 +61,24 @@ int main(int argc, char* argv[])
 	{
 	}
 	return 0;
+}
+/*return string representation of queue*/
+std::string getStrQueue(safe_ptr<router_t> rtr)
+{
+	//initial preload by static phrase
+	std::string strQueue = "queue now is: ";
+	//iterate over queue and push formatted string representation of each member to strQueue
+	for (auto itr = rtr->getFqe(); itr != std::next(rtr->getLqe()); itr++)
+	{
+		strQueue.append("idx#");
+		strQueue.append(std::to_string(itr->second));
+		strQueue.append("+");
+		strQueue.append(std::to_string(itr->first));
+		strQueue.append(", ");
+	}
+	//remove last coma and space
+	strQueue.erase(strQueue.size() - 2, 2);
+	return strQueue;
 }
 
 void setupOnExitHandlers()

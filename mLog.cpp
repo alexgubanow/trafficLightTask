@@ -10,7 +10,7 @@ char* path;
 int initLog(char* _path)
 {
 	path = _path;
-	inLog("started here");
+	return inLog("started here");
 }
 
 int inLog(std::string line)
@@ -106,5 +106,5 @@ int inLog(std::string line, int idx)
 
 int finishLog()
 {
-	inLog("finished here");
+	return inLog("finished here");
 }
