@@ -42,3 +42,40 @@ Each module have inner while loop, in which:
  - wait until receive own idx
  - after setted delay switch to red and push request to clear reservation
  - wait for setted delay
+ 
+ ## Current approach
+ ### System structure:
+ System consist: router and traffic lights
+ ```bash
+main()
+  |
+generate instances and set first idx
+ |
+ |>  queue of traffic lights
+ |      |
+ |> router broadcasting who can
+ |         ^                 |
+ |         |            wait for own idx
+ |   next please             |
+ |    ^   ^   ^              |
+ |    |   |   |              |
+ |>  |1| |2| |n|     idx <--- 
+```
+### Working flow
+On very beginning we collecting all idx+priority in sorted queue
+
+Creating stack of traffic lights and initilize each with own iterator in sorted queue
+
+Run each traffic light in own thread with passing to pointer of router instance
+
+To start swithing setting valid Top iterator
+
+### Process of swithing:
+Each traffic light have inner while loop, in which:
+ - wait until receive own idx
+ - switch on green
+ - wait for setted delay
+ - push request to clear reservation
+ - switch to red
+ - wait for setted delay
+
