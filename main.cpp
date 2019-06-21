@@ -30,7 +30,7 @@ int main(int argc, char* argv[])
 	{
 		iteratorStack.push_back(pushRequest(std::pair<int, int>(rand() % 100, i)));
 	}
-	for (auto i = 0; i < iteratorStack.size(); i++)
+	for (size_t i = 0; i < iteratorStack.size(); i++)
 	{
 		//printf("creating idx#%d\n", iteratorStack[i]->second);
 		tLightStack.push_back(lght_t());

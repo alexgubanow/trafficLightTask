@@ -24,13 +24,13 @@ int lght_t::wLoop()
 			//printf("waiting idx#%d\n", Itr->second);
 		}
 		//sw to green
-		//printf("idx#%d green\n", Itr->second);
+		printf("idx#%d green\n", Itr->second);
 		//swLight(lghtColor::Grn);
 		//wait for setted delay
 		std::this_thread::sleep_for(std::chrono::milliseconds(100));
 		//sw to red
 		nextPls();
-		//printf("idx#%d red\n", Itr->second);
+		printf("idx#%d red\n", Itr->second);
 		//swLight(lghtColor::Red);
 		//wait for setted delay
 		std::this_thread::sleep_for(std::chrono::milliseconds(80));
