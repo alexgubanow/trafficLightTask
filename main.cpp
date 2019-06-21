@@ -9,8 +9,8 @@
 
 using namespace std;
 
-constexpr auto frstLght = 1;
-constexpr auto maxLght = 5;
+constexpr auto frstLght = -1;
+constexpr auto maxLght = 4;
 
 void posix_death_signal(int signum)
 {
