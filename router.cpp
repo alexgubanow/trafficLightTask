@@ -15,8 +15,7 @@ std::map<int, int>::iterator router_t::getFqe()
 /*return iterator to last member in queue*/
 std::map<int, int>::iterator router_t::getLqe()
 {
-	//actually returned iterator is prelast -> plus one dirty fix, need to get rid of it
-	return std::prev(queue.end());
+	return queue.end();
 }
 /*Setup active iterator in queue*/
 void router_t::setTopIdx(std::map<int, int>::iterator newTop)
@@ -29,7 +28,7 @@ void router_t::setTopIdx(std::map<int, int>::iterator newTop)
 int router_t::nextPls()
 {
 	//check if currently last member in queue is active
-	if (TopIdx != getLqe())
+	if (TopIdx != std::prev(queue.end()))
 	{
 		//increment iterator of active member
 		TopIdx++;

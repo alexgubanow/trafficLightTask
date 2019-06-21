@@ -37,7 +37,7 @@ int main(int argc, char* argv[])
 	//lets generate some amount of light iterators
 	for (int i = frstLght; i < maxLght; i++)
 	{
-		//just pushing pair of random prior and current idx to stack of light iterators, probably possible to run in parallel
+		//just pushing pair of random prior and current idx to stack of light iterators
 		iteratorStack.push_back(rtr.pushRequest(std::pair<int, int>(rand() % 100, i)));
 	}	
 	inLog(getStrQueue(&rtr));
@@ -67,7 +67,7 @@ std::string getStrQueue(router_t* rtr)
 	//initial preload by static phrase
 	std::string strQueue = "queue now is: ";
 	//iterate over queue and push formatted string representation of each member to strQueue
-	for (auto itr = rtr->getFqe(); itr != std::next(rtr->getLqe()); itr++)
+	for (auto itr = rtr->getFqe(); itr != rtr->getLqe(); itr++)
 	{
 		strQueue.append("idx#");
 		strQueue.append(std::to_string(itr->second));
