@@ -6,22 +6,24 @@
 #include <thread>
 #include <signal.h>
 #include <iterator>
+#include "mLog.h"
+#include "irq_handles.h"
 
 using namespace std;
 
 constexpr auto frstLght = 1;
 constexpr auto maxLght = 4;
 
-void posix_death_signal(int signum)
-{
-	printf("ooops, signum#%d\n", signum);
-	signal(signum, SIG_DFL);
-	exit(3);
-}
+void setupOnExitHandlers();
+
 int main(int argc, char* argv[])
 {
-	//lets attach method to atleast say bye on sigmentation fault
-	signal(SIGSEGV, posix_death_signal);
+	//setup on exit handlers
+	setupOnExitHandlers();
+	//main exiter
+	atexit(mainExit);
+	//init log funcs
+	initLog("test.txt");
 	//router instance
 	safe_ptr<router_t> rtr;
 	//init of random machine
@@ -36,6 +38,18 @@ int main(int argc, char* argv[])
 		//just pushing pair of random prior and current idx to stack of light iterators, probably possible to run in parallel
 		iteratorStack.push_back(rtr->pushRequest(std::pair<int, int>(rand() % 100, i)));
 	}
+	std::string strQueue = "queue now is: ";
+	for (auto itr = rtr->getFqe(); itr != std::next(rtr->getLqe()); itr++)
+	{
+		strQueue.append("idx#");
+		strQueue.append(std::to_string(itr->second));
+		strQueue.append("+");
+		strQueue.append(std::to_string(itr->first));
+		strQueue.append(", ");
+	}
+	strQueue.erase(strQueue.size()-2, 2);
+	inLog(strQueue);
+	cout << strQueue.c_str() << endl;
 	//iterate over lights, create, init and run each
 	for (size_t i = 0; i < iteratorStack.size(); i++)
 	{
@@ -54,4 +68,13 @@ int main(int argc, char* argv[])
 	{
 	}
 	return 0;
+}
+
+void setupOnExitHandlers()
+{
+	signal(SIGTERM, (__sighandler_t)& SIGTERM_Handler);
+	signal(SIGINT, (__sighandler_t)& SIGINT_Handler);
+	signal(SIGQUIT, (__sighandler_t)& SIGQUIT_Handler);
+	signal(SIGKILL, (__sighandler_t)& SIGKILL_Handler);
+	signal(SIGHUP, (__sighandler_t)& SIGHUP_Handler);
 }
