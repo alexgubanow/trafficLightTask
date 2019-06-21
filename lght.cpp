@@ -17,20 +17,15 @@ int lght_t::wLoop(safe_ptr<router_t> rtrI)
 {
 	while (isCanRun)
 	{
-		//printf("waiting idx#%d\n", Itr->second);
 		//can be replaced by listening some port or other external interface
-		while (rtrI->getTopIdx() != Itr) {
-			//printf("waiting idx#%d\n", Itr->second);
-		}
+		while (rtrI->getTopIdx() != Itr) {		}
 		//sw to green
-		printf("idx#%d green\n", Itr->second);
-		//swLight(lghtColor::Grn);
+		swLight(lghtColor::Grn);
 		//wait for setted delay
 		std::this_thread::sleep_for(std::chrono::milliseconds(100));
 		//sw to red
 		rtrI->nextPls();
-		printf("idx#%d red\n", Itr->second);
-		//swLight(lghtColor::Red);
+		swLight(lghtColor::Red);
 		//wait for setted delay
 		std::this_thread::sleep_for(std::chrono::milliseconds(80));
 	}
@@ -49,24 +44,19 @@ int lght_t::swLight(lghtColor target)
 {
 	//remove self from Queue
 	//turn on yellow
-	//printf("idx#%d become yellow\n", Itr->second);
+	printf("idx#%d become yellow\n", Itr->second);
 	currLight = turnTo(lghtColor::Ylw);
 	//wait for pretty transition
-	std::this_thread::sleep_for(std::chrono::milliseconds(getSmallDelay()));
+	std::this_thread::sleep_for(std::chrono::milliseconds(20));
 	//turn on target color
+	if (target == lghtColor::Grn)
+	{
+		printf("idx#%d green\n", Itr->second);
+	}
+	else
+	{
+		printf("idx#%d red\n", Itr->second);
+	}
 	currLight = turnTo(target);
 	return 0;
-}
-int lght_t::getSmallDelay()
-{
-	//calc small delay as 1/4 from setted delay
-	int smallDelay = delay / 4;
-	//in case if setted delay less than 4, small delay equal to 1
-	if (smallDelay < 1)
-	{
-		smallDelay = 1;
-	}
-	//or maybe it has to be zero
-	//smallDelay = 0;
-	return smallDelay;
 }
