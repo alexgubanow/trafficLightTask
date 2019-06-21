@@ -9,11 +9,14 @@ private:
 	lghtColor currLight;
 	/*setted delay*/
 	int delay;
+	/*small delay for yellow*/
+	int sdelay;
 	/*Method to switch color from current to target, transition going with yellow in middle
 	* args:
 	* target - desired color
 	*/
 	int swLight(lghtColor target, router_t* rtrI);
+	int getSmallDelay(int OrigDelay);
 	/*flag of working posibility*/
 	int volatile isCanRun;
 public:

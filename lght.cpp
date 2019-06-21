@@ -12,6 +12,7 @@ int lght_t::init(lghtColor initColor, int _delay, std::map<int, int>::iterator _
 	Itr = _Itr;
 	currLight = initColor;
 	delay = _delay;
+	sdelay = getSmallDelay(delay);
 	return 0;
 }
 int lght_t::wLoop(router_t* rtrI)
@@ -27,7 +28,7 @@ int lght_t::wLoop(router_t* rtrI)
 		//sw to red
 		swLight(lghtColor::Red, rtrI);
 		//wait for setted delay
-		std::this_thread::sleep_for(std::chrono::milliseconds(80));
+		std::this_thread::sleep_for(std::chrono::milliseconds(100));
 	}
 	return closeGate(rtrI);
 }
@@ -50,7 +51,7 @@ int lght_t::swLight(lghtColor target, router_t* rtrI)
 	//calling nextPls here will make swithching on all yellow
 	//if (target == lghtColor::Red) { rtrI->nextPls(); }
 	//wait for pretty transition
-	std::this_thread::sleep_for(std::chrono::milliseconds(20));
+	std::this_thread::sleep_for(std::chrono::milliseconds(10));
 	//turn on target color
 	if (target == lghtColor::Grn)
 	{
@@ -67,4 +68,9 @@ int lght_t::swLight(lghtColor target, router_t* rtrI)
 	//calling nextPls here will make swithching on all red
 	if (target == lghtColor::Red) { rtrI->nextPls(); }
 	return 0;
+}
+
+int inline lght_t::getSmallDelay(int OrigDelay)
+{
+	return (OrigDelay / 10) > 0 ? (OrigDelay / 10) : 1;
 }

@@ -48,7 +48,7 @@ int main(int argc, char* argv[])
 		//pushing to stack some blank light
 		tLightStack.push_back(lght_t());
 		//init of last light by given values
-		tLightStack[i].init(lghtColor::Red, 500, iteratorStack[i]);
+		tLightStack[i].init(lghtColor::Red, 100, iteratorStack[i]);
 		//create thread with running wLoop of light, passing instance of safe_ptr<router_t>
 		std::thread thr(&lght_t::wLoop, &(tLightStack[i]), &rtr);
 		//lunch it independent
