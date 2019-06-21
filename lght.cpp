@@ -14,7 +14,7 @@ int lght_t::init(lghtColor initColor, int _delay, std::map<int, int>::iterator _
 	delay = _delay;
 	return 0;
 }
-int lght_t::wLoop(safe_ptr<router_t> rtrI)
+int lght_t::wLoop(router_t* rtrI)
 {
 	while (isCanRun)
 	{
@@ -25,8 +25,8 @@ int lght_t::wLoop(safe_ptr<router_t> rtrI)
 		//wait for setted delay
 		std::this_thread::sleep_for(std::chrono::milliseconds(100));
 		//sw to red
-		rtrI->nextPls();
 		swLight(lghtColor::Red);
+		rtrI->nextPls();
 		//wait for setted delay
 		std::this_thread::sleep_for(std::chrono::milliseconds(80));
 	}
@@ -43,7 +43,6 @@ int lght_t::closeGate()
 
 int lght_t::swLight(lghtColor target)
 {
-	//remove self from Queue
 	//turn on yellow
 	inLog("now Yellow", Itr->second);
 	printf("idx#%d become yellow\n", Itr->second);

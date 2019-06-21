@@ -92,8 +92,6 @@
     <ClInclude Include="lightDriver.h" />
     <ClInclude Include="mLog.h" />
     <ClInclude Include="router.h" />
-    <ClInclude Include="safeItr.h" />
-    <ClInclude Include="safePtr.h" />
   </ItemGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Link>

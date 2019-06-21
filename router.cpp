@@ -4,7 +4,7 @@
 /*return iterator to active member in queue*/
 std::map<int, int>::iterator router_t::getTopIdx()
 {
-	return TopIdx->getItr();
+	return TopIdx;
 }
 
 /*return iterator to first member in queue*/
@@ -22,25 +22,22 @@ std::map<int, int>::iterator router_t::getLqe()
 void router_t::setTopIdx(std::map<int, int>::iterator newTop)
 {
 	//set active iterator in queue to given one
-	TopIdx->setItr(newTop);
+	TopIdx = newTop;
 }
 
 /*Moving active iterator in queue*/
 int router_t::nextPls()
 {
-	//dirty fix to avoid collisions, after while can happen that two lght will go green
-	//probably it comes from developed principle of switching work
-	std::this_thread::sleep_for(std::chrono::nanoseconds(100));
 	//check if currently last member in queue is active
-	if (TopIdx->getItr() != getLqe())
+	if (TopIdx != getLqe())
 	{
 		//increment iterator of active member
-		TopIdx->incItr();
+		TopIdx++;
 	}
 	else
 	{
 		//set iterator of active member to first
-		TopIdx->setItr(queue.begin());
+		TopIdx = queue.begin();
 	}
 	//in future can return time to wait until
 	return 0;

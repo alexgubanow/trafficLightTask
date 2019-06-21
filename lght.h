@@ -22,7 +22,7 @@ public:
 	/*init method*/
 	int init(lghtColor initColor, int _delay, std::map<int, int>::iterator _Itr);
 	/*Method with main loop, can be stoped by switching isCanRun to 0*/
-	int wLoop(safe_ptr<router_t> rtrI);
+	int wLoop(router_t* rtrI);
 	/*Method to stop running main loop
 	* draft version
 	*/

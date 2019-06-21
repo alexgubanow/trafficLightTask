@@ -1,14 +1,12 @@
 #pragma once
 #include <map>
-#include "safePtr.h"
-#include "safeItr.h"
 
 /*Router to manage swithing quene of traffic lights*/
 class router_t
 {
 private:
 	/*iterator of active member in queue*/
-	safe_ptr<SafeItr> TopIdx;
+	std::map<int, int>::iterator TopIdx;
 	/*sorted queue, first is priority, second is idx*/
 	std::map<int, int> queue;
 public:

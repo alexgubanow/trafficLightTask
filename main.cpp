@@ -1,6 +1,5 @@
 #include <iostream>
 #include <vector>
-#include <cstdlib>
 #include <time.h>
 #include "lght.h"
 #include <thread>
@@ -12,11 +11,11 @@
 using namespace std;
 
 constexpr auto frstLght = 1;
-constexpr auto maxLght = 4;
+constexpr auto maxLght = 5;
 
 char* logFlName = (char*)"traflght.log";
 
-std::string getStrQueue(safe_ptr<router_t> rtr);
+std::string getStrQueue(router_t* rtr);
 void setupOnExitHandlers();
 
 int main(int argc, char* argv[])
@@ -28,7 +27,7 @@ int main(int argc, char* argv[])
 	//init log funcs
 	initLog(logFlName);
 	//router instance
-	safe_ptr<router_t> rtr;
+	router_t rtr;
 	//init of random machine
 	srand((unsigned char)time(NULL));
 	//stack of all lights
@@ -39,10 +38,10 @@ int main(int argc, char* argv[])
 	for (int i = frstLght; i < maxLght; i++)
 	{
 		//just pushing pair of random prior and current idx to stack of light iterators, probably possible to run in parallel
-		iteratorStack.push_back(rtr->pushRequest(std::pair<int, int>(rand() % 100, i)));
+		iteratorStack.push_back(rtr.pushRequest(std::pair<int, int>(rand() % 100, i)));
 	}	
-	inLog(getStrQueue(rtr));
-	cout << getStrQueue(rtr).c_str() << endl;
+	inLog(getStrQueue(&rtr));
+	cout << getStrQueue(&rtr).c_str() << endl;
 	//iterate over lights, create, init and run each
 	for (size_t i = 0; i < iteratorStack.size(); i++)
 	{
@@ -51,19 +50,19 @@ int main(int argc, char* argv[])
 		//init of last light by given values
 		tLightStack[i].init(lghtColor::Red, 500, iteratorStack[i]);
 		//create thread with running wLoop of light, passing instance of safe_ptr<router_t>
-		std::thread thr(&lght_t::wLoop, &(tLightStack[i]), rtr);
+		std::thread thr(&lght_t::wLoop, &(tLightStack[i]), &rtr);
 		//lunch it independent
 		thr.detach();
 	}
 	//set new king
-	rtr->setTopIdx(rtr->getFqe());
+	rtr.setTopIdx(rtr.getFqe());
 	while (true)
 	{
 	}
 	return 0;
 }
 /*return string representation of queue*/
-std::string getStrQueue(safe_ptr<router_t> rtr)
+std::string getStrQueue(router_t* rtr)
 {
 	//initial preload by static phrase
 	std::string strQueue = "queue now is: ";
