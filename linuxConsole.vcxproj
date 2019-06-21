@@ -82,11 +82,13 @@
   <ItemGroup>
     <ClCompile Include="lght.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="mLog.cpp" />
     <ClCompile Include="router.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="lght.h" />
     <ClInclude Include="lightDriver.h" />
+    <ClInclude Include="mLog.h" />
     <ClInclude Include="router.h" />
     <ClInclude Include="safeItr.h" />
     <ClInclude Include="safePtr.h" />

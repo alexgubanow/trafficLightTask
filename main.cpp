@@ -6,6 +6,7 @@
 #include <thread>
 #include <signal.h>
 #include <iterator>
+#include "mLog.h"
 
 using namespace std;
 
@@ -15,6 +16,8 @@ constexpr auto maxLght = 4;
 void posix_death_signal(int signum)
 {
 	printf("ooops, signum#%d\n", signum);
+	//inLog("ooops, signum");
+	//finishLog();
 	signal(signum, SIG_DFL);
 	exit(3);
 }
@@ -22,6 +25,11 @@ int main(int argc, char* argv[])
 {
 	//lets attach method to atleast say bye on sigmentation fault
 	signal(SIGSEGV, posix_death_signal);
+	initLog("test.txt");
+	inLog("sdcsd");
+	inLog("tyj");
+	inLog(",oki,");
+	/*
 	//router instance
 	safe_ptr<router_t> rtr;
 	//init of random machine
@@ -52,6 +60,7 @@ int main(int argc, char* argv[])
 	rtr->setTopIdx(rtr->getFqe());
 	while (true)
 	{
-	}
+	}*/
+	finishLog();
 	return 0;
 }
