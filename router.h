@@ -1,21 +1,21 @@
 #pragma once
 #include <map>
 #include <mutex>
-
-struct rqForG
-{
-	int idx;
-	int priority;
-};
+#include <atomic>
+#include "safePtr.h"
+#include "safeItr.h"
 
 class router_t
 {
 private:
-	std::map<int, int> queue;
+	safe_ptr<SafeItr> TopIdx;
+	safe_ptr<std::map<int, int>> queue;
 public:
 	router_t();
-	std::mutex queueMtx;
-	int getCurrIdx();
-	void clearQueuePlace(int targetIdx);
-	int pushRequest(int targetIdx, int targetPrior);
+	std::map<int, int>::iterator getTopIdx();
+	std::map<int, int>::iterator getFqe();
+	std::map<int, int>::iterator getLqe();
+	void setTopIdx(std::map<int, int>::iterator newTop);
+	int nextPls();
+	std::map<int, int>::iterator pushRequest(std::pair<int, int> rq);
 };

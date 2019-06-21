@@ -75,6 +75,10 @@
   <ImportGroup Label="Shared" />
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IncludePath>
+    </IncludePath>
+  </PropertyGroup>
   <ItemGroup>
     <ClCompile Include="lght.cpp" />
     <ClCompile Include="main.cpp" />
@@ -84,6 +88,8 @@
     <ClInclude Include="lght.h" />
     <ClInclude Include="lightDriver.h" />
     <ClInclude Include="router.h" />
+    <ClInclude Include="safeItr.h" />
+    <ClInclude Include="safePtr.h" />
   </ItemGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Link>

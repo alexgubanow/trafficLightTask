@@ -5,8 +5,6 @@
 class lght_t
 {
 private:
-	/*pointer to instanse of router*/
-	router_t* routerInst;
 	/*current color of light*/
 	lghtColor currLight;
 	/*setted delay*/
@@ -21,13 +19,12 @@ private:
 	/*flag of working posibility*/
 	int volatile isCanRun;
 public:
-	/*index of this*/
-	int idx;
-	/*setted priority*/
-	int priority;
-	int init(lghtColor initColor, int _delay, int _priority, int _idx, router_t* _routerInst);
+	/*iterator of this in global queue*/
+	std::map<int, int>::iterator Itr;
+	/*init method*/
+	int init(lghtColor initColor, int _delay, std::map<int, int>::iterator _Itr);
 	/*Method with main loop, can be stoped by switching isCanRun to 0*/
-	int wLoop();
+	int wLoop(safe_ptr<router_t> rtrI);
 	/*Method to stop running main loop
 	* draft version
 	*/

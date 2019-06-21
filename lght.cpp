@@ -4,42 +4,36 @@
 #include <thread>
 using namespace std;
 
-int lght_t::init(lghtColor initColor, int _delay, int _priority, int _idx, router_t* _routerInst)
+int lght_t::init(lghtColor initColor, int _delay, std::map<int, int>::iterator _Itr)
 {
-	printf("init of lght#: %d\n", _idx);
+	printf("init of lght idx#%d\n", _Itr->second);
 	isCanRun = 1;
-	routerInst = _routerInst;
-	idx = _idx;
+	Itr = _Itr;
 	currLight = initColor;
 	delay = _delay;
-	priority = _priority;
 	return 0;
 }
-int lght_t::wLoop()
+int lght_t::wLoop(safe_ptr<router_t> rtrI)
 {
-	rqForG request;
 	while (isCanRun)
 	{
-		//update info for request
-		request.idx = idx;
-		request.priority = priority + idx;
-		//pushing request (idx+priority) to queue
-		routerInst->pushRequest(request);
 		//can be replaced by listening some port or other external interface
-		while (routerInst->getCurrIdx() != idx) {}
+		while (rtrI->getTopIdx() != Itr) {		}
 		//sw to green
 		swLight(lghtColor::Grn);
 		//wait for setted delay
-		std::this_thread::sleep_for(std::chrono::milliseconds(delay));
+		std::this_thread::sleep_for(std::chrono::milliseconds(100));
 		//sw to red
+		rtrI->nextPls();
 		swLight(lghtColor::Red);
 		//wait for setted delay
-		std::this_thread::sleep_for(std::chrono::milliseconds(delay));
+		std::this_thread::sleep_for(std::chrono::milliseconds(80));
 	}
 	return closeGate();
 }
 int lght_t::closeGate()
 {
+	/*its not thread safe, has to be rethinked*/
 	//going to red
 	swLight(lghtColor::Red);
 	//prevent to run main loop
@@ -49,25 +43,20 @@ int lght_t::closeGate()
 int lght_t::swLight(lghtColor target)
 {
 	//remove self from Queue
-	routerInst->clearQueuePlace(idx);
 	//turn on yellow
+	printf("idx#%d become yellow\n", Itr->second);
 	currLight = turnTo(lghtColor::Ylw);
 	//wait for pretty transition
-	std::this_thread::sleep_for(std::chrono::milliseconds(getSmallDelay()));
+	std::this_thread::sleep_for(std::chrono::milliseconds(20));
 	//turn on target color
+	if (target == lghtColor::Grn)
+	{
+		printf("idx#%d green\n", Itr->second);
+	}
+	else
+	{
+		printf("idx#%d red\n", Itr->second);
+	}
 	currLight = turnTo(target);
 	return 0;
-}
-int lght_t::getSmallDelay()
-{
-	//calc small delay as 1/4 from setted delay
-	int smallDelay = delay / 4;
-	//in case if setted delay less than 4, small delay equal to 1
-	if (smallDelay < 1)
-	{
-		smallDelay = 1;
-	}
-	//or maybe it has to be zero
-	//smallDelay = 0;
-	return smallDelay;
 }
