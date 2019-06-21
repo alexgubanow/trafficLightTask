@@ -41,12 +41,5 @@ int router_t::nextPls()
 
 std::map<int, int>::iterator router_t::pushRequest(std::pair<int, int> rq)
 {
-	std::map<int, int>::iterator itr = queue->insert(queue->lower_bound(rq.first), rq);
-	printf("queue now is: ");
-	for (auto itr = queue->begin(); itr != queue->end(); itr++)
-	{
-		printf("idx#%d+%d, ", itr->second, itr->first);
-	}
-	printf("\n");
-	return itr;
+	return queue->insert(queue->lower_bound(rq.first), rq);
 }

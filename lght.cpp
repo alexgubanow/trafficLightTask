@@ -7,7 +7,6 @@ using namespace std;
 
 int lght_t::init(lghtColor initColor, int _delay, std::map<int, int>::iterator _Itr)
 {
-	inLog("init of lght", _Itr->second);
 	printf("init of lght idx#%d\n", _Itr->second);
 	isCanRun = 1;
 	Itr = _Itr;
@@ -46,6 +45,7 @@ int lght_t::swLight(lghtColor target)
 {
 	//remove self from Queue
 	//turn on yellow
+	inLog("now Yellow", Itr->second);
 	printf("idx#%d become yellow\n", Itr->second);
 	currLight = turnTo(lghtColor::Ylw);
 	//wait for pretty transition
@@ -54,10 +54,12 @@ int lght_t::swLight(lghtColor target)
 	if (target == lghtColor::Grn)
 	{
 		printf("idx#%d green\n", Itr->second);
+		inLog("now Green", Itr->second);
 	}
 	else
 	{
 		printf("idx#%d red\n", Itr->second);
+		inLog("now Red", Itr->second);
 	}
 	currLight = turnTo(target);
 	return 0;

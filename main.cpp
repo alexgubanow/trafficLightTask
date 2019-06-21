@@ -38,6 +38,18 @@ int main(int argc, char* argv[])
 		//just pushing pair of random prior and current idx to stack of light iterators, probably possible to run in parallel
 		iteratorStack.push_back(rtr->pushRequest(std::pair<int, int>(rand() % 100, i)));
 	}
+	std::string strQueue = "queue now is: ";
+	for (auto itr = rtr->getFqe(); itr != std::next(rtr->getLqe()); itr++)
+	{
+		strQueue.append("idx#");
+		strQueue.append(std::to_string(itr->second));
+		strQueue.append("+");
+		strQueue.append(std::to_string(itr->first));
+		strQueue.append(", ");
+	}
+	strQueue.erase(strQueue.size()-2, 2);
+	inLog(strQueue);
+	cout << strQueue.c_str() << endl;
 	//iterate over lights, create, init and run each
 	for (size_t i = 0; i < iteratorStack.size(); i++)
 	{
