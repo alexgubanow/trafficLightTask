@@ -1,60 +1,34 @@
 #include "router.h"
 #include <thread>
-//router_t::router_t()
-//{
-//}
-//
-class SafeItr
+router_t::router_t()
 {
-public:
-	SafeItr() {};
-	~SafeItr() {};
-	void setItr(std::map<int, int>::iterator newItr)
-	{
-		itr = newItr;
-	}
-	void incItr()
-	{
-		itr++;
-	}
-	std::map<int, int>::iterator getItr()
-	{
-		return itr;
-	}
-private:
-	std::map<int, int>::iterator itr;
-};
+}
 
-
-//SafeItr TopIdx;
-safe_ptr<SafeItr> TopIdx;
-safe_ptr<std::map<int, int>> queue;
-
-std::map<int, int>::iterator getTopIdx()
+std::map<int, int>::iterator router_t::getTopIdx()
 {
-	std::lock_guard<decltype(TopIdx)> lock(TopIdx);
+	//std::lock_guard<decltype(TopIdx)> lock(TopIdx);
 	return TopIdx->getItr();
 }
 
-std::map<int, int>::iterator getFqe()
+std::map<int, int>::iterator router_t::getFqe()
 {
 	return queue->begin();
 }
 
-std::map<int, int>::iterator getLqe()
+std::map<int, int>::iterator router_t::getLqe()
 {
 	return std::prev(queue->end());
 }
 
-void setTopIdx(std::map<int, int>::iterator newTop)
+void router_t::setTopIdx(std::map<int, int>::iterator newTop)
 {
-	std::lock_guard<decltype(TopIdx)> lock(TopIdx);
+	//std::lock_guard<decltype(TopIdx)> lock(TopIdx);
 	TopIdx->setItr(newTop);
 }
 
-int nextPls()
+int router_t::nextPls()
 {
-	std::lock_guard<decltype(TopIdx)> lock(TopIdx);
+	//std::lock_guard<decltype(TopIdx)> lock(TopIdx);
 	std::this_thread::sleep_for(std::chrono::nanoseconds(100));
 	//printf("before TopIdx#%d, ", TopIdx->getItr()->second);
 	if (TopIdx->getItr() != getLqe())
@@ -70,7 +44,7 @@ int nextPls()
 	return 0;
 }
 
-std::map<int, int>::iterator pushRequest(std::pair<int, int> rq)
+std::map<int, int>::iterator router_t::pushRequest(std::pair<int, int> rq)
 {
 	std::map<int, int>::iterator itr = queue->insert(queue->lower_bound(rq.first), rq);
 	printf("queue now is: ");

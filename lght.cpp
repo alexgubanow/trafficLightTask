@@ -9,18 +9,17 @@ int lght_t::init(lghtColor initColor, int _delay, std::map<int, int>::iterator _
 	printf("init of lght idx#%d\n", _Itr->second);
 	isCanRun = 1;
 	Itr = _Itr;
-	//routerInst = _routerInst;
 	currLight = initColor;
 	delay = _delay;
 	return 0;
 }
-int lght_t::wLoop()
+int lght_t::wLoop(safe_ptr<router_t> rtrI)
 {
 	while (isCanRun)
 	{
 		//printf("waiting idx#%d\n", Itr->second);
 		//can be replaced by listening some port or other external interface
-		while (getTopIdx() != Itr) {
+		while (rtrI->getTopIdx() != Itr) {
 			//printf("waiting idx#%d\n", Itr->second);
 		}
 		//sw to green
@@ -29,7 +28,7 @@ int lght_t::wLoop()
 		//wait for setted delay
 		std::this_thread::sleep_for(std::chrono::milliseconds(100));
 		//sw to red
-		nextPls();
+		rtrI->nextPls();
 		printf("idx#%d red\n", Itr->second);
 		//swLight(lghtColor::Red);
 		//wait for setted delay
