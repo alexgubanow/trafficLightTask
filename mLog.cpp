@@ -60,7 +60,18 @@ int inLog(std::string line, int idx)
 {
 	int fd = open(path, O_WRONLY | O_CREAT | O_APPEND);
 	if (fd != -1) {
-		line.insert(0, std::to_string(idx));
+		std::string header;
+		time_t rawtime;
+		struct tm* timeinfo;
+		char buffer[80];
+		time(&rawtime);
+		timeinfo = localtime(&rawtime);
+		strftime(buffer, 80, "%FT%T%z ", timeinfo);
+		header.append(buffer);
+		header.append("[");
+		header.append(std::to_string(idx));
+		header.append("] ");
+		line.insert(0, header);
 		line.push_back('\r');
 		line.push_back('\n');
 		if (flock(fd, 2) != 0)
@@ -69,13 +80,6 @@ int inLog(std::string line, int idx)
 			close(fd);
 			return fd;
 		}
-		time_t rawtime;
-		struct tm* timeinfo;
-		char buffer[80];
-		time(&rawtime);
-		timeinfo = localtime(&rawtime);
-		strftime(buffer, 80, "%FT%T%z ", timeinfo);
-		line.insert(0, buffer);
 		write(fd, line.c_str(), line.size());
 		if (flock(fd, 8) != 0)
 		{

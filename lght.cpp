@@ -2,10 +2,12 @@
 #include <stdio.h>
 #include <chrono>
 #include <thread>
+#include "mLog.h"
 using namespace std;
 
 int lght_t::init(lghtColor initColor, int _delay, std::map<int, int>::iterator _Itr)
 {
+	inLog("init of lght", _Itr->second);
 	printf("init of lght idx#%d\n", _Itr->second);
 	isCanRun = 1;
 	Itr = _Itr;

@@ -80,12 +80,14 @@
     </IncludePath>
   </PropertyGroup>
   <ItemGroup>
+    <ClCompile Include="irq_handles.cpp" />
     <ClCompile Include="lght.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="mLog.cpp" />
     <ClCompile Include="router.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="irq_handles.h" />
     <ClInclude Include="lght.h" />
     <ClInclude Include="lightDriver.h" />
     <ClInclude Include="mLog.h" />

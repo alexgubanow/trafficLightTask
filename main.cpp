@@ -7,29 +7,23 @@
 #include <signal.h>
 #include <iterator>
 #include "mLog.h"
+#include "irq_handles.h"
 
 using namespace std;
 
 constexpr auto frstLght = 1;
 constexpr auto maxLght = 4;
 
-void posix_death_signal(int signum)
-{
-	printf("ooops, signum#%d\n", signum);
-	//inLog("ooops, signum");
-	//finishLog();
-	signal(signum, SIG_DFL);
-	exit(3);
-}
+void setupOnExitHandlers();
+
 int main(int argc, char* argv[])
 {
-	//lets attach method to atleast say bye on sigmentation fault
-	signal(SIGSEGV, posix_death_signal);
+	//setup on exit handlers
+	setupOnExitHandlers();
+	//main exiter
+	atexit(mainExit);
+	//init log funcs
 	initLog("test.txt");
-	inLog("sdcsd");
-	inLog("tyj");
-	inLog(",oki,");
-	/*
 	//router instance
 	safe_ptr<router_t> rtr;
 	//init of random machine
@@ -60,7 +54,15 @@ int main(int argc, char* argv[])
 	rtr->setTopIdx(rtr->getFqe());
 	while (true)
 	{
-	}*/
-	finishLog();
+	}
 	return 0;
+}
+
+void setupOnExitHandlers()
+{
+	signal(SIGTERM, (__sighandler_t)& SIGTERM_Handler);
+	signal(SIGINT, (__sighandler_t)& SIGINT_Handler);
+	signal(SIGQUIT, (__sighandler_t)& SIGQUIT_Handler);
+	signal(SIGKILL, (__sighandler_t)& SIGKILL_Handler);
+	signal(SIGHUP, (__sighandler_t)& SIGHUP_Handler);
 }
