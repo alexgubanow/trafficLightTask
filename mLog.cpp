@@ -15,7 +15,7 @@ int initLog(char* _path)
 
 int inLog(std::string line)
 {
-	int fd = open(path, O_WRONLY | O_CREAT | O_APPEND);
+	int fd = open(path, O_CREAT | O_TRUNC | O_WRONLY | O_APPEND, 0666);
 	if (fd != -1) {
 		line.push_back('\r');
 		line.push_back('\n');

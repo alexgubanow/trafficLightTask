@@ -7,11 +7,14 @@
 #include <iterator>
 #include "mLog.h"
 #include "irq_handles.h"
+#include <pthread.h>
 
 using namespace std;
 
 constexpr auto frstLght = 1;
 constexpr auto maxLght = 5;
+constexpr auto num_threads = maxLght - frstLght;
+typedef void* (*THREADFUNCPTR)(void*);
 
 char* logFlName = (char*)"traflght.log";
 
@@ -42,18 +45,33 @@ int main(int argc, char* argv[])
 	}	
 	inLog(getStrQueue(&rtr));
 	cout << getStrQueue(&rtr).c_str() << endl;
+	/* Block all real time signals so they can be used for the timers.
+	   Note: this has to be done in main() before any threads are created
+	   so they all inherit the same mask. Doing it later is subject to
+	   race conditions */
+	/*sigset_t alarm_sig;
+	sigemptyset(&alarm_sig);
+	for (int i = SIGRTMIN; i <= SIGRTMAX; i++)
+		sigaddset(&alarm_sig, i);
+	sigprocmask(SIG_BLOCK, &alarm_sig, NULL);*/
 	//iterate over lights, create, init and run each
 	for (size_t i = 0; i < iteratorStack.size(); i++)
 	{
 		//pushing to stack some blank light
 		tLightStack.push_back(lght_t());
 		//init of last light by given values
-		tLightStack[i].init(lghtColor::Red, 100, iteratorStack[i]);
+		tLightStack[i].init(lghtColor::Red, 100, iteratorStack[i], &rtr);
 		//create thread with running wLoop of light, passing instance of safe_ptr<router_t>
-		std::thread thr(&lght_t::wLoop, &(tLightStack[i]), &rtr);
-		//lunch it independent
-		thr.detach();
+		//std::thread thr(&lght_t::wLoop, &(tLightStack[i]));
+		////lunch it independent
+		//thr.detach();
+		//Thread ID
+		pthread_t threadId;
+		// Create thread using memeber function as startup routine
+		pthread_create(&threadId, NULL, (THREADFUNCPTR)&lght_t::wLoop, &(tLightStack[i]));
+		pthread_join(threadId, NULL);
 	}
+	
 	//set new king
 	rtr.setTopIdx(rtr.getFqe());
 	while (true)

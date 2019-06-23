@@ -5,6 +5,7 @@
 class lght_t
 {
 private:
+	router_t* rtrI;
 	/*current color of light*/
 	lghtColor currLight;
 	/*setted delay*/
@@ -15,7 +16,7 @@ private:
 	* args:
 	* target - desired color
 	*/
-	int swLight(lghtColor target, router_t* rtrI);
+	int swLight(lghtColor target);
 	int getSmallDelay(int OrigDelay);
 	/*flag of working posibility*/
 	int volatile isCanRun;
@@ -23,11 +24,11 @@ public:
 	/*iterator of this in global queue*/
 	std::map<int, int>::iterator Itr;
 	/*init method*/
-	int init(lghtColor initColor, int _delay, std::map<int, int>::iterator _Itr);
+	int init(lghtColor initColor, int _delay, std::map<int, int>::iterator _Itr, router_t* _rtrI);
 	/*Method with main loop, can be stoped by switching isCanRun to 0*/
-	int wLoop(router_t* rtrI);
+	int wLoop();
 	/*Method to stop running main loop
 	* draft version
 	*/
-	int closeGate(router_t* rtrI);
+	int closeGate();
 };
