@@ -15,7 +15,7 @@
 static dev_t dev;
 static struct cdev c_dev;
 static struct class* cl;
-static lghtColor lColor = Ylw;
+static lghtColor lColor = NoneColor;
 static int idx = -1;
 
 static int lghtIO_open(struct inode* i, struct file* f) { return 0; }
@@ -57,8 +57,8 @@ static long lghtIO_ioctl(struct file* f, unsigned int cmd, unsigned long arg)
 			return -EACCES;
 		}
 		printk(KERN_INFO "lghtIO: Light#%d\n", q.idx);
-		setColor(Ylw, q.idx);
-		q.clrT = Ylw;
+		setColor(NoneColor, q.idx);
+		q.clrT = NoneColor;
 		if (copy_to_user((lghtIO_arg_t*)arg, &q, sizeof(lghtIO_arg_t)))
 		{
 			printk(KERN_ERR "lghtIO: Error while transmitting data to user about Light\n");

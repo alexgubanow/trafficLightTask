@@ -1,7 +1,7 @@
 #pragma once
 #include <linux/ioctl.h>
 //enum to describe possible colors of each traffic light
-typedef enum lghtColor_t { Red, Ylw, Grn }lghtColor;
+typedef enum lghtColor_t { Red, Ylw, Grn, NoneColor = 987 }lghtColor;
 
 typedef struct
 {

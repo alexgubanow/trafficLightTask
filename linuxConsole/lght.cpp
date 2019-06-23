@@ -46,7 +46,7 @@ int lght_t::swLight(lghtColor target, router_t* rtrI)
 	//turn on yellow
 	inLog("now Yellow", Itr->second);
 	printf("idx#%d become yellow\n", Itr->second);
-	currLight = turnTo(lghtColor::Ylw);
+	currLight = setLght(lghtColor::Ylw, Itr->second);
 	//need to choose switching style, can all be yellow or not
 	//calling nextPls here will make swithching on all yellow
 	//if (target == lghtColor::Red) { rtrI->nextPls(); }
@@ -63,7 +63,7 @@ int lght_t::swLight(lghtColor target, router_t* rtrI)
 		printf("idx#%d red\n", Itr->second);
 		inLog("now Red", Itr->second);
 	}
-	currLight = turnTo(target);
+	currLight = setLght(target, Itr->second);
 	//need to choose switching style, can all be yellow or not
 	//calling nextPls here will make swithching on all red
 	if (target == lghtColor::Red) { rtrI->nextPls(); }

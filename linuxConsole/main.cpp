@@ -26,8 +26,13 @@ int main(int argc, char* argv[])
 	atexit(mainExit);
 	//init log funcs
 	initLog(logFlName);
-	lghtIOinit();
-	/*
+	//trying to communicate to lghtIO
+	if (lghtIOinit() == -1)
+	{
+		inLog("Failed to load lghtIO driver\n");
+		return -1;
+	}
+	inLog("lghtIO driver are alive\n");
 	//router instance
 	router_t rtr;
 	//init of random machine
@@ -61,7 +66,7 @@ int main(int argc, char* argv[])
 	while (true)
 	{
 	}
-	*/
+	
 	return 0;
 }
 /*return string representation of queue*/
