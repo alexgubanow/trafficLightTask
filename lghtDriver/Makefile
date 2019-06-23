@@ -2,7 +2,6 @@ obj-m := lghtIO.o
 KernHead := /lib/modules/$(shell uname -r)/build
 ProjDir := $(shell pwd)
 
-
 all: module
 
 module:

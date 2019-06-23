@@ -26,6 +26,8 @@ int main(int argc, char* argv[])
 	atexit(mainExit);
 	//init log funcs
 	initLog(logFlName);
+	lghtIOinit();
+	/*
 	//router instance
 	router_t rtr;
 	//init of random machine
@@ -59,6 +61,7 @@ int main(int argc, char* argv[])
 	while (true)
 	{
 	}
+	*/
 	return 0;
 }
 /*return string representation of queue*/

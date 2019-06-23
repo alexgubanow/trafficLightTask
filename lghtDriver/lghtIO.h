@@ -5,7 +5,6 @@ typedef enum lghtColor_t { Red, Ylw, Grn }lghtColor;
 
 typedef struct
 {
-
 	int idx;
 	lghtColor clrT;
 } lghtIO_arg_t;
