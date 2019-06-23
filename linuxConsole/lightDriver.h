@@ -1,5 +1,6 @@
 #pragma once
-//enum to describe possible colors of each traffic light
-enum lghtColor { Red, Ylw, Grn };
-
-lghtColor inline turnTo(lghtColor clr) { /*some hardware func*/return clr;};
+#include "../lghtDriver/lghtIO.h"
+int lghtIOinit();
+lghtColor setLght(lghtColor clr, int idx);
+lghtColor getLght(int idx);
+lghtColor resetLght(int idx);
