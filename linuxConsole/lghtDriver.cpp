@@ -5,16 +5,12 @@
 #include <unistd.h>
 
 char* lghtIOdev = "/dev/lghtIO";
-int fd;
+int openLghtIO();
 
 int lghtIOinit()
 {
-	fd = open(lghtIOdev, O_RDWR); 
-	if (fd == -1)
-	{
-		perror("lghtIO failed to open");
-		return 2;
-	}
+	printf("Testing connection to LghtIO driver\n");
+	int fd = openLghtIO();
 	lghtIO_arg_t rq;
 	rq.clrT = lghtColor::NoneColor;
 	rq.idx = 11;
@@ -46,13 +42,16 @@ int lghtIOinit()
 	return fd;
 }
 
+int openLghtIO()
+{
+	int fd = open(lghtIOdev, O_RDWR);
+	if (fd == -1) { perror("lghtIO failed to open"); }
+	return fd;
+}
 lghtColor setLght(lghtColor clr, int idx)
 {
-	fd = open(lghtIOdev, O_RDWR);
-	if (fd == -1)
-	{
-		perror("lghtIO failed to open");
-	}
+	int fd = openLghtIO();
+	if (fd == -1) { return lghtColor::NoneColor; }
 	lghtIO_arg_t rq;
 	rq.clrT = clr;
 	rq.idx = idx;
@@ -65,11 +64,8 @@ lghtColor setLght(lghtColor clr, int idx)
 }
 lghtColor getLght(int idx)
 {
-	fd = open(lghtIOdev, O_RDWR);
-	if (fd == -1)
-	{
-		perror("lghtIO failed to open");
-	}
+	int fd = openLghtIO();
+	if (fd == -1) { return lghtColor::NoneColor; }
 	lghtIO_arg_t rq;
 	rq.clrT = lghtColor::NoneColor;
 	rq.idx = idx;
@@ -82,11 +78,8 @@ lghtColor getLght(int idx)
 }
 lghtColor resetLght(int idx)
 {
-	fd = open(lghtIOdev, O_RDWR);
-	if (fd == -1)
-	{
-		perror("lghtIO failed to open");
-	}
+	int fd = openLghtIO();
+	if (fd == -1) { return lghtColor::NoneColor; }
 	lghtIO_arg_t rq;
 	rq.clrT = lghtColor::NoneColor;
 	rq.idx = idx;
