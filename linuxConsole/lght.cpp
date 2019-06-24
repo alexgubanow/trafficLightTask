@@ -44,8 +44,7 @@ int lght_t::closeGate(router_t* rtrI)
 int lght_t::swLight(lghtColor target, router_t* rtrI)
 {
 	//turn on yellow
-	inLog("now Yellow", Itr->second);
-	printf("idx#%d become yellow\n", Itr->second);
+	inLog("now Yellow", Itr->second, true);
 	currLight = setLght(lghtColor::Ylw, Itr->second);
 	//need to choose switching style, can all be yellow or not
 	//calling nextPls here will make swithching on all yellow
@@ -55,13 +54,11 @@ int lght_t::swLight(lghtColor target, router_t* rtrI)
 	//turn on target color
 	if (target == lghtColor::Grn)
 	{
-		printf("idx#%d green\n", Itr->second);
-		inLog("now Green", Itr->second);
+		inLog("now Green", Itr->second, true);
 	}
 	else
 	{
-		printf("idx#%d red\n", Itr->second);
-		inLog("now Red", Itr->second);
+		inLog("now Red", Itr->second, true);
 	}
 	currLight = setLght(target, Itr->second);
 	//need to choose switching style, can all be yellow or not

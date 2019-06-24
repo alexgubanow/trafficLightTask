@@ -27,12 +27,12 @@ int main(int argc, char* argv[])
 	//init log funcs
 	initLog(logFlName);
 	//trying to communicate to lghtIO
-	if (lghtIOinit() == -1)
+	if (lghtIOinit() < 0)
 	{
-		inLog("Failed to load lghtIO driver\n");
+		inLog("Failed to load lghtIO driver", true);
 		return -1;
 	}
-	inLog("lghtIO driver are alive\n");
+	inLog("lghtIO driver are alive", true);
 	//router instance
 	router_t rtr;
 	//init of random machine
@@ -47,8 +47,7 @@ int main(int argc, char* argv[])
 		//just pushing pair of random prior and current idx to stack of light iterators
 		iteratorStack.push_back(rtr.pushRequest(std::pair<int, int>(rand() % 100, i)));
 	}	
-	inLog(getStrQueue(&rtr));
-	cout << getStrQueue(&rtr).c_str() << endl;
+	inLog(getStrQueue(&rtr), true);
 	//iterate over lights, create, init and run each
 	for (size_t i = 0; i < iteratorStack.size(); i++)
 	{
@@ -77,11 +76,7 @@ std::string getStrQueue(router_t* rtr)
 	//iterate over queue and push formatted string representation of each member to strQueue
 	for (auto itr = rtr->getFqe(); itr != rtr->getLqe(); itr++)
 	{
-		strQueue.append("idx#");
-		strQueue.append(std::to_string(itr->second));
-		strQueue.append("+");
-		strQueue.append(std::to_string(itr->first));
-		strQueue.append(", ");
+		strQueue.append("idx#" + std::to_string(itr->second) + "+" + std::to_string(itr->first) + ", ");
 	}
 	//remove last coma and space
 	strQueue.erase(strQueue.size() - 2, 2);
