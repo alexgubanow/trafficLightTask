@@ -1,7 +1,12 @@
 #pragma once
 #include <fcntl.h>
 #include <string>
-int initLog(char* path);
+
+/*Writing start mark to logfile*/
+int initLog(char* _path);
+/*Writing finish mark to logfile*/
 int finishLog();
-int inLog(std::string line, bool showInConsole);
+/*Write to logfile given line, with marked by idx*/
 int inLog(std::string line, int idx, bool showInConsole);
+/*Write to logfile given line*/
+int inLog(std::string line, bool showInConsole);

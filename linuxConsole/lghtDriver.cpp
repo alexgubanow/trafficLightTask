@@ -3,10 +3,11 @@
 #include <fcntl.h>
 #include <sys/ioctl.h>
 #include <unistd.h>
-
+/*path to device file*/
 char* lghtIOdev = "/dev/lghtIO";
+/*Method of getting file descriptor of device, by opening its file*/
 int openLghtIO();
-
+/*Method to test connection with driver*/
 int lghtIOinit()
 {
 	printf("Testing connection to LghtIO driver\n");
@@ -42,30 +43,39 @@ int lghtIOinit()
 	return fd;
 }
 
+/*Method of getting file descriptor of device, by opening its file*/
 int openLghtIO()
 {
 	int fd = open(lghtIOdev, O_RDWR);
 	if (fd == -1) { perror("lghtIO failed to open"); }
 	return fd;
 }
+/*setter for light by idx*/
 lghtColor setLght(lghtColor clr, int idx)
 {
+	//get file descriptor by opening
 	int fd = openLghtIO();
 	if (fd == -1) { return lghtColor::NoneColor; }
+	//setup request with given values
 	lghtIO_arg_t rq;
 	rq.clrT = clr;
 	rq.idx = idx;
+	//push request to device
 	if (ioctl(fd, setLghtByIdx, &rq) == -1)
 	{
 		perror("lghtIO ioctl setLghtByIdx");
 	}
+	//close device file
 	close(fd);
 	return rq.clrT;
 }
+/*getter for light by idx*/
 lghtColor getLght(int idx)
 {
+	//get file descriptor by opening
 	int fd = openLghtIO();
 	if (fd == -1) { return lghtColor::NoneColor; }
+	//setup request with given values
 	lghtIO_arg_t rq;
 	rq.clrT = lghtColor::NoneColor;
 	rq.idx = idx;
@@ -73,13 +83,16 @@ lghtColor getLght(int idx)
 	{
 		perror("lghtIO ioctl getLghtByIdx");
 	}
+	//close device file
 	close(fd);
 	return rq.clrT;
 }
+/*retter for light by idx*/
 lghtColor resetLght(int idx)
 {
 	int fd = openLghtIO();
 	if (fd == -1) { return lghtColor::NoneColor; }
+	//setup request with given values
 	lghtIO_arg_t rq;
 	rq.clrT = lghtColor::NoneColor;
 	rq.idx = idx;
@@ -87,6 +100,7 @@ lghtColor resetLght(int idx)
 	{
 		perror("lghtIO ioctl resetLghtByIdx");
 	}
+	//close device file
 	close(fd);
 	return rq.clrT;
 }
