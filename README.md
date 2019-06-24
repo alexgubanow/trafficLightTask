@@ -27,7 +27,8 @@ but additionally you have to check for installed g++, gdb, make, rsync, zip. I c
 sudo apt-get install -y g++ gdb make rsync zip
 ```
 UPD from 24.06.2019:
-
+To compile projects onto VM, you have to use same instructions as for WSL machine, addionally you have to install linux kernel headers, respected to your kernel version.
+Compiling lghtDriver isn't possible on WSL:
 As mentioned in task, was needed to create some driver, kernel module to emulate some device. Until this point I was running on WSL, but it based on NT kernel and ofcource there is no kernel headers which needed to compile an kernel module. I have switched to VirtualMachine with installed Debian on. Second trouble, VS 2019 still not able to recoginize all includes and in default mode compiling fails. To heal it, swithed to makefiles, Intellisense works by half, but atleast compiles.
 So, to build lghtDriver project need just run make command in directory. After to load driver can call:
 ```bash
