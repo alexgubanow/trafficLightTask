@@ -26,6 +26,8 @@ static char* enumToColor(lghtColor targetColor)
 		return (char*)"Yellow";
 	case Red:
 		return (char*)"Red";
+	case NoneColor:
+		return (char*)"NoneColor";
 	default:
 		return (char*)"WrongCode";
 	}
