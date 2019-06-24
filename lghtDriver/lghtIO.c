@@ -7,108 +7,130 @@
 #include <linux/device.h>
 #include <linux/errno.h>
 #include <asm/uaccess.h>
-//#include "lghtIO_ioctl.h"
 
+/*first of the requested range of minor numbers*/
 #define FIRST_MINOR 0
+/*the number of minor numbers required*/
 #define MINOR_CNT 1
-
+/*Global variable of device*/
 static dev_t dev;
 static struct cdev c_dev;
 static struct class* cl;
+/*vars to store state of light*/
 static lghtColor lColor = NoneColor;
 static int idx = -1;
 
+/*default methods to handle opening and closing device*/
 static int lghtIO_open(struct inode* i, struct file* f) { return 0; }
 static int lghtIO_close(struct inode* i, struct file* f) { return 0; }
+/*getter of color, returns color of light by idx*/
 static lghtColor getColor(int targetIdx);
+/*setter of color, push given color to light by idx*/
 static void setColor(lghtColor targetColor, int targetIdx);
 
+/*Method to cast incoming arg to lghtIO_arg_t struct*/
+int copyFrom(lghtIO_arg_t* buff, unsigned long addr)
+{
+	if (copy_from_user(buff, (lghtIO_arg_t*)addr, sizeof(lghtIO_arg_t)))
+	{
+		printk(KERN_ERR "lghtIO: Error while getting data from user\n");
+		return -EACCES;
+	}
+	return 0;
+}
+/*Nethod pushing lghtIO_arg_t answer to user space*/
+int copyTo(lghtIO_arg_t* answer, unsigned long addr)
+{
+	if (copy_to_user((lghtIO_arg_t*)addr, answer, sizeof(lghtIO_arg_t)))
+	{
+		printk(KERN_ERR "lghtIO: Error while transmitting data to user about Light\n");
+		return -EACCES;
+	}
+	return 0;
+}
+
+/*handle of query to driver*/
 #if (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,35))
 static int lghtIO_ioctl(struct inode* i, struct file* f, unsigned int cmd, unsigned long arg)
 #else
 static long lghtIO_ioctl(struct file* f, unsigned int cmd, unsigned long arg)
 #endif
 {
-	lghtIO_arg_t q;
-	int q_idx;
-
+	//variables to store possible variant of request
+	lghtIO_arg_t rq;
+	int rq_idx;
+	int err = 0;
+	//recognize requst type
 	switch (cmd)
 	{
-	case getLghtByIdx:
+	case getLghtByIdx://getter
 		printk(KERN_INFO "lghtIO: Request for Light");
-		if (copy_from_user(&q, (lghtIO_arg_t*)arg, sizeof(lghtIO_arg_t)))
-		{
-			printk(KERN_ERR "lghtIO: Error while getting data from user about Light\n");
-			return -EACCES;
-		}
-		printk(KERN_INFO "lghtIO: Light#%d\n", q.idx);
-		q.clrT = getColor(q.idx);
-		if (copy_to_user((lghtIO_arg_t*)arg, &q, sizeof(lghtIO_arg_t)))
-		{
-			printk(KERN_ERR "lghtIO: Error while transmitting data to user about Light\n");
-			return -EACCES;
-		}
+		//casting incoming arg to lghtIO_arg_t
+		err = copyFrom(&rq, arg);
+		if (err < 0) { return err; }
+		printk(KERN_INFO "lghtIO: Light#%d\n", rq.idx);
+		//geting color
+		rq.clrT = getColor(rq.idx);
+		//pushing answer back
+		copyTo(&rq, arg);
+		if (err < 0) { return err; }
 		break;
-	case resetLghtByIdx:
+	case resetLghtByIdx://reseter
 		printk(KERN_INFO "lghtIO: Request to reset Light");
-		if (copy_from_user(&q, (lghtIO_arg_t*)arg, sizeof(lghtIO_arg_t)))
-		{
-			printk(KERN_ERR "lghtIO: Error while getting data from user about Light\n");
-			return -EACCES;
-		}
-		printk(KERN_INFO "lghtIO: Light#%d\n", q.idx);
-		setColor(NoneColor, q.idx);
-		q.clrT = NoneColor;
-		if (copy_to_user((lghtIO_arg_t*)arg, &q, sizeof(lghtIO_arg_t)))
-		{
-			printk(KERN_ERR "lghtIO: Error while transmitting data to user about Light\n");
-			return -EACCES;
-		}
+		//casting incoming arg to lghtIO_arg_t
+		err = copyFrom(&rq, arg);
+		if (err < 0) { return err; }
+		printk(KERN_INFO "lghtIO: Light#%d\n", rq.idx);
+		//set color to default
+		setColor(NoneColor, rq.idx);
+		rq.clrT = NoneColor;
+		//pushing answer back
+		copyTo(&rq, arg);
+		if (err < 0) { return err; }
 		break;
-	case setLghtByIdx:
+	case setLghtByIdx://setter
 		printk(KERN_INFO "lghtIO: Request for set Light");
-		if (copy_from_user(&q, (lghtIO_arg_t*)arg, sizeof(lghtIO_arg_t)))
-		{
-			printk(KERN_ERR "lghtIO: Error while getting data from user about Light\n");
-			return -EACCES;
-		}
-		printk(KERN_INFO "lghtIO: Light#%d\n", q.idx);
-		setColor(q.clrT, q.idx);
+		//casting incoming arg to lghtIO_arg_t
+		err = copyFrom(&rq, arg);
+		if (err < 0) { return err; }
+		printk(KERN_INFO "lghtIO: Light#%d\n", rq.idx);
+		//set color to given value
+		setColor(rq.clrT, rq.idx);
 		break;
-	case removeLghtByIdx:
-		printk(KERN_INFO "lghtIO: Request for remove Light");
-		if (copy_from_user(&q_idx, (int*)arg, sizeof(int)))
-		{
-			printk(KERN_ERR "lghtIO: Error while getting data from user about Light\n");
-			return -EACCES;
-		}
-		printk(KERN_INFO "lghtIO: Light#%d\n", q_idx);
-		//need to insert here removing call
-		break;
+		/*curently nothing to remove*/
+	//case removeLghtByIdx://remover
+	//	printk(KERN_INFO "lghtIO: Request for remove Light");
+	//	if (copy_from_user(&rq_idx, (int*)arg, sizeof(int)))
+	//	{
+	//		printk(KERN_ERR "lghtIO: Error while getting data from user about Light\n");
+	//		return -EACCES;
+	//	}
+	//	printk(KERN_INFO "lghtIO: Light#%d\n", rq_idx);
+	//	//need to insert here removing call
+	//	break;
 	default:
 		printk(KERN_ERR "lghtIO: Received wrong control sequence\n");
 		return -EINVAL;
 	}
 
-	return 0;
+	return err;
 }
-
+/*getter of color, returns color of light by idx*/
 lghtColor getColor(int targetIdx)
 {
 	return lColor;
 }
 
+/*setter of color, push given color to light by idx*/
 void setColor(lghtColor targetColor, int targetIdx)
 {
 	idx = targetIdx;
 	lColor = targetColor;
-	//enumToColor
 	printk(KERN_INFO "lghtIO: Light idx#%d is become to %s\n", targetIdx, enumToColor(targetColor));
 }
-
+/*declaring default handles of driver*/
 static struct file_operations lghtIO_fops =
 {
-
 	.owner = THIS_MODULE,
 	.open = lghtIO_open,
 	.release = lghtIO_close,
@@ -118,11 +140,11 @@ static struct file_operations lghtIO_fops =
 	.unlocked_ioctl = lghtIO_ioctl
 #endif
 };
+/*init method of driver*/
 static int __init lghtIO_ioctl_init(void)
 {
 	int ret;
 	struct device* dev_ret;
-
 
 	if ((ret = alloc_chrdev_region(&dev, FIRST_MINOR, MINOR_CNT, "lghtIO_ioctl")) < 0)
 	{
@@ -159,7 +181,7 @@ static int __init lghtIO_ioctl_init(void)
 
 	return 0;
 }
-
+/*exit method of driver*/
 static void __exit lghtIO_ioctl_exit(void)
 {
 	device_destroy(cl, dev);
@@ -168,8 +190,7 @@ static void __exit lghtIO_ioctl_exit(void)
 	unregister_chrdev_region(dev, MINOR_CNT);
 	printk(KERN_INFO "lghtIO: Unloading finished, bye bye\n");
 }
-
-
+/*declaring init and exit*/
 module_init(lghtIO_ioctl_init);
 module_exit(lghtIO_ioctl_exit);
 

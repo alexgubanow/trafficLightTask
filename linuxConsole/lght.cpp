@@ -7,7 +7,7 @@ using namespace std;
 
 int lght_t::init(lghtColor initColor, int _delay, std::map<int, int>::iterator _Itr)
 {
-	printf("init of lght idx#%d\n", _Itr->second);
+	inLog("init of lght", _Itr->second, true);
 	isCanRun = 1;
 	Itr = _Itr;
 	currLight = initColor;
