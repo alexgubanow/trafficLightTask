@@ -97,17 +97,6 @@ static long lghtIO_ioctl(struct file* f, unsigned int cmd, unsigned long arg)
 		//set color to given value
 		setColor(rq.clrT, rq.idx);
 		break;
-		/*curently nothing to remove*/
-	//case removeLghtByIdx://remover
-	//	printk(KERN_INFO "lghtIO: Request for remove Light");
-	//	if (copy_from_user(&rq_idx, (int*)arg, sizeof(int)))
-	//	{
-	//		printk(KERN_ERR "lghtIO: Error while getting data from user about Light\n");
-	//		return -EACCES;
-	//	}
-	//	printk(KERN_INFO "lghtIO: Light#%d\n", rq_idx);
-	//	//need to insert here removing call
-	//	break;
 	default:
 		printk(KERN_ERR "lghtIO: Received wrong control sequence\n");
 		return -EINVAL;

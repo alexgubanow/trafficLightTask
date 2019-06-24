@@ -14,8 +14,6 @@ typedef struct
 #define getLghtByIdx _IOWR('q', 1, lghtColor *)
 #define resetLghtByIdx _IOWR('q', 2, lghtColor *)
 #define setLghtByIdx _IOW('q', 3, lghtIO_arg_t *)
-/*curently nothing to remove*/
-//#define removeLghtByIdx _IOW('q', 4, int *)
 
 /*converting color enum to string*/
 static char* enumToColor(lghtColor targetColor)
