@@ -26,6 +26,21 @@ but additionally you have to check for installed g++, gdb, make, rsync, zip. I c
 ```bash
 sudo apt-get install -y g++ gdb make rsync zip
 ```
+UPD from 24.06.2019:
+
+As mentioned in task, was needed to create some driver, kernel module to emulate some device. Until this point I was running on WSL, but it based on NT kernel and ofcource there is no kernel headers which needed to compile an kernel module. I have switched to VirtualMachine with installed Debian on. Second trouble, VS 2019 still not able to recoginize all includes and in default mode compiling fails. To heal it, swithed to makefiles, Intellisense works by half, but atleast compiles.
+So, to build lghtDriver project need just run make command in directory. After to load driver can call:
+```bash
+sudo insmod lghtIO
+```
+To unload:
+```bash
+sudo rmmod lghtIO
+```
+All output of driver was pointed to kernel log, to check this out need to run:
+```bash
+sudo dmesg
+```
 
 ## First draft of system structure:
 ```bash
