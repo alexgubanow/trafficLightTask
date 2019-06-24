@@ -43,7 +43,7 @@ sudo dmesg
 ```
 ## TO-DO list:
  - fix of setting delays in lght.cpp, currently number are used. while using varible cause to stuck in random place of loop
- - move from threads to timers, currently repected branch cause Segmentation fault
+ - move from threads to timers, currently respected branch "basedOnTimers" cause Segmentation fault
 
 ## First draft of system structure:
 ```bash
