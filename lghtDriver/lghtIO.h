@@ -19,12 +19,12 @@ static char* enumToColor(lghtColor targetColor)
 	switch (targetColor)
 	{
 	case Grn:
-		return "Green";
+		return (char*)"Green";
 	case Ylw:
-		return "Yellow";
+		return (char*)"Yellow";
 	case Red:
-		return "Red";
+		return (char*)"Red";
 	default:
-		return "WrongCode";
+		return (char*)"WrongCode";
 	}
 }

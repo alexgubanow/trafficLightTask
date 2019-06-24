@@ -11,6 +11,7 @@ int lghtIOinit()
 {
 	printf("Testing connection to LghtIO driver\n");
 	int fd = openLghtIO();
+	if (fd < 0) { return fd; }
 	lghtIO_arg_t rq;
 	rq.clrT = lghtColor::NoneColor;
 	rq.idx = 11;
@@ -26,7 +27,6 @@ int lghtIOinit()
 		perror("lghtIO ioctl setLghtByIdx");
 	}
 	printf("Color of #%d is %s\n", rq.idx, enumToColor(rq.clrT));
-	rq.clrT = lghtColor::NoneColor;
 	rq.idx = 13;
 	if (ioctl(fd, resetLghtByIdx, &rq.idx) == -1)
 	{
