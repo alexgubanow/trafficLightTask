@@ -41,6 +41,9 @@ All output of driver was pointed to kernel log, to check this out need to run:
 ```bash
 sudo dmesg
 ```
+## TO-DO list:
+ - fix of setting delays in lght.cpp, currently number are used. while using varible cause to stuck in random place of loop
+ - move from threads to timers, currently repected branch cause Segmentation fault
 
 ## First draft of system structure:
 ```bash
