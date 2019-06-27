@@ -37,7 +37,7 @@ int inLog(std::string line, int idx, bool showInConsole)
 	//generating header for log entry and pushing it to buffer
 	line.insert(0, getHeader(std::to_string(idx)));
 	//show generated entry in console, if specified
-	if (showInConsole) { printf("%s", line.c_str()); }
+	if (showInConsole) { printf("%s\n", line.c_str()); }
 	//writing data to file
 	write(fd, (line + "\r\n").c_str(), line.size());
 	//trying to unlock file
