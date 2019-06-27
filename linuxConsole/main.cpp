@@ -41,22 +41,22 @@ int main(int argc, char* argv[])
 	std::vector<lght_t> tLightStack;
 	//stack of iterators for future queue
 	std::vector<std::map<int, int>::iterator> iteratorStack;
-	//lets generate some amount of light iterators
+
+	//iterate over lights, create and init each
 	for (int i = frstLght; i < maxLght; i++)
-	{
-		//just pushing pair of random prior and current idx to stack of light iterators
-		iteratorStack.push_back(rtr.pushRequest(std::pair<int, int>(rand() % 100, i)));
-	}	
-	inLog(getStrQueue(&rtr), true);
-	//iterate over lights, create, init and run each
-	for (size_t i = 0; i < iteratorStack.size(); i++)
 	{
 		//pushing to stack some blank light
 		tLightStack.push_back(lght_t());
 		//init of last light by given values
-		tLightStack[i].init(lghtColor::Red, 100, iteratorStack[i]);
-		//create thread with running wLoop of light, passing instance of safe_ptr<router_t>
-		std::thread thr(&lght_t::wLoop, &(tLightStack[i]), &rtr);
+		tLightStack.back().init(lghtColor::Red, 100, rtr.pushRequest(std::pair<int, int>(rand() % 100, i)));
+		
+	}	
+	inLog(getStrQueue(&rtr), true);
+	//iterate over lights, to run each
+	for (std::vector<lght_t>::iterator it = tLightStack.begin(); it != tLightStack.end(); ++it) {
+		/* std::cout << *it; ... */
+		//create thread with running wLoop of light
+		std::thread thr(&lght_t::wLoop, it, &rtr);
 		//lunch it independent
 		thr.detach();
 	}

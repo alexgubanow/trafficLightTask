@@ -1,5 +1,6 @@
 #include "router.h"
 #include <thread>
+#include "mLog.h"
 
 /*return iterator to active member in queue*/
 std::map<int, int>::iterator router_t::getTopIdx()
@@ -27,17 +28,15 @@ void router_t::setTopIdx(std::map<int, int>::iterator newTop)
 /*Moving active iterator in queue*/
 int router_t::nextPls()
 {
+	//increment iterator of active member
+	TopIdx = std::next(TopIdx);
 	//check if currently last member in queue is active
-	if (TopIdx != std::prev(queue.end()))
-	{
-		//increment iterator of active member
-		TopIdx++;
-	}
-	else
+	if (TopIdx == std::next(std::next(queue.end())))
 	{
 		//set iterator of active member to first
 		TopIdx = queue.begin();
 	}
+	inLog("next idx", TopIdx->second, true);
 	//in future can return time to wait until
 	return 0;
 }

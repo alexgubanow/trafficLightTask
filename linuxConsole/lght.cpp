@@ -20,7 +20,10 @@ int lght_t::wLoop(router_t* rtrI)
 	while (isCanRun)
 	{
 		//can be replaced by listening some port or other external interface
-		while (rtrI->getTopIdx() != Itr) {}
+		while (rtrI->getTopIdx() != Itr) {
+			//avoid of ddos
+			std::this_thread::sleep_for(std::chrono::milliseconds(1));
+		}
 		//sw to green
 		swLight(lghtColor::Grn, rtrI);
 		//wait for setted delay
