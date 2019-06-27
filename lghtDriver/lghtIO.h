@@ -11,8 +11,8 @@ typedef struct
 } lghtIO_arg_t;
 
 /*declaring types of request*/
-#define getLghtByIdx _IOWR('q', 1, lghtColor *)
-#define resetLghtByIdx _IOWR('q', 2, lghtColor *)
+#define getLghtByIdx _IOWR('q', 1, lghtIO_arg_t *)
+#define resetLghtByIdx _IOWR('q', 2, lghtIO_arg_t *)
 #define setLghtByIdx _IOW('q', 3, lghtIO_arg_t *)
 
 /*converting color enum to string*/
